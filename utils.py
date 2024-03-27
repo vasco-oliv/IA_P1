@@ -1,4 +1,6 @@
+import math
 from queue import PriorityQueue
+import random
 
 data = [
     'data/a_example.txt',
@@ -180,3 +182,87 @@ def read_total_days(filename):
 
     values = [int(x) for x in line.split()]
     return values[2]
+
+
+# get all neighbors of a solution by swithcing two libraries' positions
+def get_neighbors(initial_solution):
+    l = len(initial_solution)
+
+    new_solutions = []
+    for i in range(1, l - 1):
+        for k in range(i + 1, l):
+            new_solutions.append(initial_solution[:i] + [initial_solution[k]] + initial_solution[i + 1:k] + [initial_solution[i]] + initial_solution[k + 1:])
+    
+    return new_solutions
+            
+
+# basic Hill Climbing
+# basic Hill Climbing
+def hill_climbing_basic(solution, scores, total_days):
+    best_score = calculate_score(solution, scores, total_days)
+    l = len(solution)
+    best_solution = solution
+    there_is_best = True
+    while there_is_best:
+        there_is_best = False
+        for i in range(1, l - 1):
+            for k in range(i + 1, l):
+                n = best_solution[:i] + [best_solution[k]] + best_solution[i + 1:k] + [best_solution[i]] + best_solution[k + 1:]
+                s = calculate_score(n, scores, total_days)
+                if s > best_score:
+                    best_score = s
+                    best_solution = n
+                    there_is_best = True
+                    break
+
+    return best_solution, best_score
+
+# Hill Climbing with Steepest Ascent    
+def hill_climbing_steepest(solution, scores, total_days):
+    best_score = calculate_score(solution, scores, total_days)
+    l = len(solution)
+    best_solution = solution
+    there_is_best = True
+    while there_is_best:
+        there_is_best = False
+        for i in range(1, l - 1):
+            for k in range(i + 1, l):
+                n = best_solution[:i] + [best_solution[k]] + best_solution[i + 1:k] + [best_solution[i]] + best_solution[k + 1:]
+                s = calculate_score(n, scores, total_days)
+                if s > best_score:
+                    best_score = s
+                    best_solution = n
+                    there_is_best = True
+
+    return best_solution, best_score
+
+# Simulated Annealing
+def simulated_annealing(solution, scores, total_days, max_iter, T, alpha):
+    score = calculate_score(solution, scores, total_days)
+    best_score = score
+    best_solution = solution
+    current_solution = solution
+    current_score = score
+    for i in range(max_iter):
+        i = random.randint(0, len(current_solution) - 2)
+        k = random.randint(i + 1, len(current_solution) - 1)
+        neighbor = current_solution[:i] + [current_solution[k]] + current_solution[i + 1:k] + [current_solution[i]] + current_solution[k + 1:]
+        new_score = calculate_score(neighbor, scores, total_days)
+        delta = new_score - current_score
+        if delta > 0:
+            current_solution = neighbor
+            current_score = new_score
+            if new_score > best_score:
+                best_score = new_score
+                best_solution = neighbor
+        else:
+            if random.random() < math.exp(delta / T):
+                current_solution = neighbor
+                current_score = new_score
+        T = T * alpha
+
+    return best_solution, best_score
+
+
+
+
