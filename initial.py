@@ -144,3 +144,8 @@ def initial_script():
 
         write_solution(solution, "initial_solutions.txt")
 
+def initial_script_without_write():
+    for i in range(len(data_files)):
+        days_left = read_total_days(data_files[i])
+        total_books, total_libs, total_days, scores, libs = read_file(data_files[i], i)
+

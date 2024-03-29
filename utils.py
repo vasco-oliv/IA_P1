@@ -68,7 +68,7 @@ def get_score_data():
         calculated_score = calculate_score(results[i], all_book_scores[i], all_total_days[i], i)
         scores.append(calculated_score)
 
-    df = pd.DataFrame(scores, index=display_data_files()[1:], columns=["Score"])
+    df = pd.DataFrame(scores, index=display_data_files()[1:], columns=["Initial Score"])
     df.index.name = "File"
     return df
 

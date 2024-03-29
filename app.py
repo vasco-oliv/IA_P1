@@ -1,18 +1,21 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from utils import display_data_files, get_score_data, get_results, get_scores_and_days
-from initial import initial_script
+from utils import display_data_files, get_score_data
+from initial import initial_script, initial_script_without_write
 
 def main():
 
     
     st.set_page_config(page_title="Book Scanning Optimizer", page_icon=":books:", layout="wide")
-    st.title("Book Scanning Optimizer :books:")
+    st.title("Book Scanning Optimizer :books:")  
+    st.markdown("---")
 
-    initial_script()
-    #st.write(get_scores_and_days())
-    st.dataframe(get_score_data())
+    initial_script_without_write()
+    df = get_score_data()
+    st.subheader("Scores")
+    df["Best Score"] = df["Initial Score"]
+    st.dataframe(df, use_container_width=True)
     
     with st.sidebar:
         st.subheader("Choose the file to run the optimizer")
