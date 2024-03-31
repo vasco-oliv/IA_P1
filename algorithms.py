@@ -1,10 +1,10 @@
 import math
 import random
-from initial import calculate_score
+from utils import calculate_score
 
 # basic Hill Climbing
-def hill_climbing_basic(solution, scores, total_days, index):
-    best_score = calculate_score(solution, scores, total_days, index)
+def hill_climbing_basic(solution, scores, total_days, libs_dict):
+    best_score = calculate_score(solution, scores, total_days, libs_dict)
     l = len(solution)
     best_solution = solution
     there_is_best = True
@@ -13,7 +13,7 @@ def hill_climbing_basic(solution, scores, total_days, index):
         for i in range(1, l - 1):
             for k in range(i + 1, l):
                 n = best_solution[:i] + [best_solution[k]] + best_solution[i + 1:k] + [best_solution[i]] + best_solution[k + 1:]
-                s = calculate_score(n, scores, total_days, index)
+                s = calculate_score(n, scores, total_days, libs_dict)
                 if s > best_score:
                     best_score = s
                     best_solution = n
@@ -23,8 +23,8 @@ def hill_climbing_basic(solution, scores, total_days, index):
     return best_solution, best_score
 
 # Hill Climbing with Steepest Ascent    
-def hill_climbing_steepest(solution, scores, total_days, index):
-    best_score = calculate_score(solution, scores, total_days, index)
+def hill_climbing_steepest(solution, scores, total_days, libs_dict):
+    best_score = calculate_score(solution, scores, total_days, libs_dict)
     l = len(solution)
     best_solution = solution
     there_is_best = True
@@ -33,7 +33,7 @@ def hill_climbing_steepest(solution, scores, total_days, index):
         for i in range(1, l - 1):
             for k in range(i + 1, l):
                 n = best_solution[:i] + [best_solution[k]] + best_solution[i + 1:k] + [best_solution[i]] + best_solution[k + 1:]
-                s = calculate_score(n, scores, total_days, index)
+                s = calculate_score(n, scores, total_days, libs_dict)
                 if s > best_score:
                     best_score = s
                     best_solution = n
@@ -42,8 +42,8 @@ def hill_climbing_steepest(solution, scores, total_days, index):
     return best_solution, best_score
 
 # Simulated Annealing
-def simulated_annealing(solution, scores, total_days, index, max_iter, T, alpha):
-    score = calculate_score(solution, scores, total_days, index)
+def simulated_annealing(solution, scores, total_days, libs_dict, max_iter, T, alpha):
+    score = calculate_score(solution, scores, total_days, libs_dict)
     best_score = score
     best_solution = solution
     current_solution = solution
@@ -52,7 +52,7 @@ def simulated_annealing(solution, scores, total_days, index, max_iter, T, alpha)
         i = random.randint(0, len(current_solution) - 2)
         k = random.randint(i + 1, len(current_solution) - 1)
         neighbor = current_solution[:i] + [current_solution[k]] + current_solution[i + 1:k] + [current_solution[i]] + current_solution[k + 1:]
-        new_score = calculate_score(neighbor, scores, total_days, index)
+        new_score = calculate_score(neighbor, scores, total_days, libs_dict)
         delta = new_score - current_score
         if delta > 0:
             current_solution = neighbor
@@ -69,8 +69,8 @@ def simulated_annealing(solution, scores, total_days, index, max_iter, T, alpha)
     return best_solution, best_score
 
 # Tabu Search 
-def tabu_search(solution, scores, total_days, index, max_iter, tenure):
-    score = calculate_score(solution, scores, total_days, index)
+def tabu_search(solution, scores, total_days, libs_dict, max_iter, tenure):
+    score = calculate_score(solution, scores, total_days, libs_dict)
     best_score = score
     best_solution = solution
     current_solution = solution
@@ -80,7 +80,7 @@ def tabu_search(solution, scores, total_days, index, max_iter, tenure):
         i = random.randint(0, len(current_solution) - 2)
         k = random.randint(i + 1, len(current_solution) - 1)
         neighbor = current_solution[:i] + [current_solution[k]] + current_solution[i + 1:k] + [current_solution[i]] + current_solution[k + 1:]
-        new_score = calculate_score(neighbor, scores, total_days, index)
+        new_score = calculate_score(neighbor, scores, total_days, libs_dict)
         if neighbor in tabu_list or new_score <= current_score*0.9:
             continue
         if new_score > best_score:
@@ -96,8 +96,8 @@ def tabu_search(solution, scores, total_days, index, max_iter, tenure):
 
 
 # Simulated Annealing with Tabu Search
-def simulated_annealing_tabu_search(solution, scores, total_days, index, max_iter, T, alpha, tenure):
-    score = calculate_score(solution, scores, total_days, index)
+def simulated_annealing_tabu_search(solution, scores, total_days, libs_dict, max_iter, T, alpha, tenure):
+    score = calculate_score(solution, scores, total_days, libs_dict)
     best_score = score
     best_solution = solution
     current_solution = solution
@@ -107,7 +107,7 @@ def simulated_annealing_tabu_search(solution, scores, total_days, index, max_ite
         i = random.randint(0, len(current_solution) - 2)
         k = random.randint(i + 1, len(current_solution) - 1)
         neighbor = current_solution[:i] + [current_solution[k]] + current_solution[i + 1:k] + [current_solution[i]] + current_solution[k + 1:]
-        new_score = calculate_score(neighbor, scores, total_days, index)
+        new_score = calculate_score(neighbor, scores, total_days, libs_dict)
         if neighbor in tabu_list:
             continue
         delta = new_score - current_score

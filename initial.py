@@ -131,21 +131,32 @@ def write_solution(solution, filename):
             f.write(f"{lib[0]} {len(lib[1])}\n")
             f.write(" ".join([str(x) for x in lib[1]]) + "\n")
         
+def write_score(score, filename):
+    with open(filename, "a") as f:
+        f.write(f"{score} ")
+
 def initial_script():
-    f = open("initial_solutions.txt", "w")
+    f = open("solutions/initial_solutions.txt", "w")
+    f.close()
+
+    f = open("solutions/initial_scores.txt", "w")
     f.close()
 
     for i in range(len(data_files)):
-        days_left = read_total_days(data_files[i])
+        # days_left = read_total_days(data_files[i])
         total_books, total_libs, total_days, scores, libs = read_file(data_files[i], i)
         att = Singleton(total_books, total_libs, total_days, scores, libs, i)
 
-        solution, _ = solve(att)
+        solution, score = solve(att)
 
-        write_solution(solution, "initial_solutions.txt")
+        write_solution(solution, "solutions/initial_solutions.txt")
+        write_score(score, "solutions/initial_scores.txt")
 
 def initial_script_without_write():
     for i in range(len(data_files)):
         days_left = read_total_days(data_files[i])
         total_books, total_libs, total_days, scores, libs = read_file(data_files[i], i)
 
+
+if __name__ == "__main__":
+    initial_script()
