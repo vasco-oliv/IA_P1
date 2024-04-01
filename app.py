@@ -65,7 +65,7 @@ def main():
             case "Simulated Annealing with Tabu Search":
                 st.subheader("Simulated Annealing with Tabu Search Parameters")
                 temperature = st.number_input("Initial temperature", value=150.0)
-                cooling_rate = st.number_input("Cooling rate", value=0.95)
+                cooling_rate = st.number_input("Cooling rate", value=0.95, format="%.4f")
                 iterations = st.number_input("Iterations", value=1000)
                 tabu_size = st.number_input("Tenure", value=10)
             case _:
