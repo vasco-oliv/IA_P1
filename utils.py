@@ -1,10 +1,9 @@
-from initial import calculate_score
 import pandas as pd
 import os
 from queue import Queue
 from classes import Book, Library
 
-
+# data files
 data = [
     'data/a_example.txt',
     'data/b_read_on.txt',
@@ -14,6 +13,7 @@ data = [
     'data/f_libraries_of_the_world.txt'
 ]
 
+# best solutions files
 best_solutions = [
     'solutions/best_solution_a.txt',
     'solutions/best_solution_b.txt',
@@ -23,6 +23,7 @@ best_solutions = [
     'solutions/best_solution_f.txt'
 ]
 
+# algorithms
 algorithms = [
     "Basic Hill Climbing",
     "Steepest Hill Climbing",
@@ -30,18 +31,22 @@ algorithms = [
     "Simulated Annealing with Tabu Search",
 ]
 
+# get the names of the algorithms
 def get_algorithm_names():
     return algorithms
 
+# get the names of the data files to display
 def display_data_files():
     display_data = ["All"]
     display_data.extend([file.split('/')[-1] for file in data])
 
     return display_data
 
+# get the data files
 def get_data_files():
     return data
 
+# get the initial solutions/results
 def get_results():
     results = []
 
@@ -64,6 +69,7 @@ def get_results():
 
     return results
 
+# get the book scores and total days of each file
 def get_scores_and_days():
     all_book_scores = []
     all_total_days = []
@@ -82,18 +88,7 @@ def get_scores_and_days():
 
     return all_total_days, all_book_scores
 
-# def get_score_data():
-#     results = get_results()
-#     all_total_days, all_book_scores = get_scores_and_days()
-#     scores=[]
-#     for i in range(len(results)):
-#         calculated_score = calculate_score(results[i], all_book_scores[i], all_total_days[i], i)
-#         scores.append(calculated_score)
-
-#     df = pd.DataFrame(scores, index=display_data_files()[1:], columns=["Initial Score"])
-#     df.index.name = "File"
-#     return df
-
+# get the initial and best scores for each file
 def get_score_data():
     scores = []
     with open("solutions/initial_scores.txt", 'r') as f:
@@ -118,10 +113,7 @@ def get_score_data():
     df.index.name = "File"
     df.loc["Total Score"] = df.sum()
 
-    # add percentage improvement
     df["Improvement (%)"] = (df["Best Score"] - df["Initial Score"]) / df["Initial Score"] * 100
-
-    # transform the Improvement column in a string with the "%" symbol
     df["Improvement (%)"] = df["Improvement (%)"].apply(lambda x: f"{x:.2f}%")
 
     df = df.style.set_properties(**{
@@ -130,6 +122,7 @@ def get_score_data():
 
     return df
 
+# read the file for optimization
 def read_file_for_optimize(filename, index, from_best):
     f = open(filename, "r")
 
@@ -208,6 +201,7 @@ def read_file_for_optimize(filename, index, from_best):
 
     return libs_dict, total_days, scores, result
 
+# calculate the score of a solution
 def calculate_score(solution, scores, total_days, libs_dict):
     score = 0
     scanned_books = set()
@@ -227,6 +221,7 @@ def calculate_score(solution, scores, total_days, libs_dict):
 
     return score
 
+# get the current best score of a file
 def get_current_best_score(index):
     if not os.path.exists(best_solutions[index]):
         return -1
@@ -236,6 +231,7 @@ def get_current_best_score(index):
 
     return best_score
 
+# get the current best solution and score of a file
 def get_current_best(index):
     if not os.path.exists(best_solutions[index]):
         return None, -1
@@ -258,6 +254,7 @@ def get_current_best(index):
 
     return result, best_score
 
+# save the best solution of a file
 def save_best(index, best_score, best_solution):
     with open(best_solutions[index], 'w') as f:
         f.write(str(best_score) + "\n")
