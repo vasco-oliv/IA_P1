@@ -49,7 +49,7 @@ def main():
     # display the initial and best scores for each file
     df = get_score_data()
     st.subheader("Scores")
-    st.write(df.to_html(), unsafe_allow_html=True)
+    st.dataframe(df)
     
     best_score = []
 

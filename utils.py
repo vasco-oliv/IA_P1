@@ -116,9 +116,9 @@ def get_score_data():
     df["Improvement (%)"] = (df["Best Score"] - df["Initial Score"]) / df["Initial Score"] * 100
     df["Improvement (%)"] = df["Improvement (%)"].apply(lambda x: f"{x:.2f}%")
 
-    df = df.style.set_properties(**{
-        'text-align': 'center'
-    })
+    # change all the values to string
+    for col in df.columns:
+        df[col] = df[col].apply(lambda x: str(x))
 
     return df
 
